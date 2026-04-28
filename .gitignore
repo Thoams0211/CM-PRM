@@ -1,0 +1,188 @@
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100/
+.Trashes/
+
+# =========================
+# Editor / IDE
+# =========================
+.vscode/
+.idea/
+*.iml
+*.suo
+*.user
+*.userossc
+*.sln.docstates
+*.swp
+*.swo
+*~
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.*
+*.local
+*.secret
+*.key
+*.pem
+
+# =========================
+# Dependency directories
+# =========================
+node_modules/
+vendor/
+
+# =========================
+# Build / cache / temp
+# =========================
+dist/
+build/
+out/
+target/
+release/
+debug/
+tmp/
+temp/
+.cache/
+.eslintcache
+.parcel-cache/
+.next/
+.nuxt/
+.svelte-kit/
+coverage/
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+pip-wheel-metadata/
+
+# =========================
+# Java / JVM
+# =========================
+.gradle/
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+# Go
+# =========================
+bin/
+.coverprofile
+
+# =========================
+# Rust
+# =========================
+target/
+Cargo.lock
+
+# =========================
+# C / C++ / CMake
+# =========================
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+Makefile
+makedep*
+libtool
+aclocal.m4
+m4/
+autom4te.cache/
+
+# =========================
+# Swift / Xcode
+# =========================
+.build/
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcuserdatad/
+*.xcuserstate
+
+# =========================
+# Frontend package managers
+# =========================
+.pnpm-store/
+.npm/
+.yarn/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Test / coverage reports
+# =========================
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# =========================
+# Archives
+# =========================
+*.7z
+*.gz
+*.zip
+*.tar
+*.tgz
+*.bz2
+*.rar
+
+# =========================
+# Misc binary / generated files
+# =========================
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# =========================
+# Project-specific optional ignores
+# =========================
+# data/
+# artifacts/
+# checkpoints/
+# outputs/
+# models/

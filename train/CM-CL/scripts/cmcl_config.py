@@ -57,7 +57,7 @@ class FDivergenceConstants:
 
 
 @dataclass
-class RPCConfig(TrainingArguments):
+class CMCLConfig(TrainingArguments):
     r"""
     Configuration class for the [`DPOTrainer`].
 
@@ -417,28 +417,28 @@ class RPCConfig(TrainingArguments):
         },
     )
 
-    rpc_alpha: float = field(
+    cmcl_alpha: float = field(
         default=1.0,
         metadata={
-            "help": "α parameter from the RPC paper, which controls the weighting of the log ratio of the chosen and rejected responses."
+            "help": "α parameter from the CMCL paper, which controls the weighting of the log ratio of the chosen and rejected responses."
         },
     )
-    rpc_beta: float = field(
+    cmcl_beta: float = field(
         default=0.1,
         metadata={
-            "help": "β parameter from the RPC paper, which controls the weighting of the squared log ratio of the chosen and rejected responses."
+            "help": "β parameter from the CMCL paper, which controls the weighting of the squared log ratio of the chosen and rejected responses."
         },
     )
-    rpc_gamma: float = field(
+    cmcl_gamma: float = field(
         default=0.1,
         metadata={
-            "help": "γ parameter from the RPC paper, which controls the weighting of the squared log ratio of the chosen and rejected responses."
+            "help": "γ parameter from the CMCL paper, which controls the weighting of the squared log ratio of the chosen and rejected responses."
         },
     )
-    rpc_tau: float = field(
+    cmcl_tau: float = field(
         default=1.0,
         metadata={
-            "help": "τ parameter from the RPC paper, which controls the temperature of the log ratio of the chosen and rejected responses."
+            "help": "τ parameter from the CMCL paper, which controls the temperature of the log ratio of the chosen and rejected responses."
         },
     )
 

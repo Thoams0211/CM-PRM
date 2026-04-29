@@ -142,7 +142,7 @@ for i in $(seq 1 ${NUM_ITERATIONS}); do
   # Step 2: Run Discriminator
   echo ">>> Step 2: Run Discriminator..."
   DISC_CMD=(
-    bash discriminator_rpc.sh
+    bash discriminator_cmcl.sh
     --model_path "${DISC_MODEL_PATH}"
     --discriminator_path "${DISCRIMINATOR_PATH}"
     --generator_path "${BUFFER_PATH}"

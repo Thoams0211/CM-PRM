@@ -182,7 +182,7 @@ class DataCollatorForPreference(DataCollatorMixin):
         return output
 
 
-class RPCTrainer(BaseTrainer):
+class CMCLTrainer(BaseTrainer):
     """
     Trainer for Direct Preference Optimization (DPO) method.
 
@@ -456,7 +456,7 @@ class RPCTrainer(BaseTrainer):
             )
         for loss_type in self.loss_type:
             if (
-                loss_type in ["hinge", "ipo", "bco_pair", "sppo_hard", "nca_pair", "apo_zero", "apo_down", "rpc"]
+                loss_type in ["hinge", "ipo", "bco_pair", "sppo_hard", "nca_pair", "apo_zero", "apo_down", "cmcl"]
                 and args.label_smoothing > 0
             ):
                 logger.warning(
@@ -1228,26 +1228,26 @@ class RPCTrainer(BaseTrainer):
             chosen_rewards = torch.zeros_like(chosen_logps)
             rejected_rewards = torch.zeros_like(rejected_logps)
 
-        elif loss_type == "rpc":
-            # RPC loss: L_RPC = -τ*log(π_θ(y_w|x)/π_ref(y_w|x)) + α*τ*log(π_θ(y_l|x)/π_ref(y_l|x)) 
+        elif loss_type == "cmcl":
+            # CMCL loss: L_CMCL = -τ*log(π_θ(y_w|x)/π_ref(y_w|x)) + α*τ*log(π_θ(y_l|x)/π_ref(y_l|x)) 
             #           + (β*τ²/2)*[log(π_θ(y_w|x)/π_ref(y_w|x))]^2 + (γ*τ²/2)*[log(π_θ(y_l|x)/π_ref(y_l|x))]^2
             # where y_w is chosen (winning) and y_l is rejected (losing)
             
-            # Get RPC hyperparameters from args, with default values
-            rpc_alpha = getattr(self.args, 'rpc_alpha', 1.0)
-            rpc_beta = getattr(self.args, 'rpc_beta', 0.1)
-            rpc_gamma = getattr(self.args, 'rpc_gamma', 0.1)
-            rpc_tau = getattr(self.args, 'rpc_tau', 1.0)
+            # Get CMCL hyperparameters from args, with default values
+            cmcl_alpha = getattr(self.args, 'cmcl_alpha', 1.0)
+            cmcl_beta = getattr(self.args, 'cmcl_beta', 0.1)
+            cmcl_gamma = getattr(self.args, 'cmcl_gamma', 0.1)
+            cmcl_tau = getattr(self.args, 'cmcl_tau', 1.0)
             
-            # Compute RPC loss using the logratios already computed at the beginning of the function
-            tau_squared = rpc_tau ** 2
+            # Compute CMCL loss using the logratios already computed at the beginning of the function
+            tau_squared = cmcl_tau ** 2
 
             # Compute Losses
             losses = (
-                -rpc_tau * chosen_logratios
-                + rpc_alpha * rpc_tau * rejected_logratios
-                + (rpc_beta * tau_squared / 2.0) * (chosen_logratios ** 2)
-                + (rpc_gamma * tau_squared / 2.0) * (rejected_logratios ** 2)
+                -cmcl_tau * chosen_logratios
+                + cmcl_alpha * cmcl_tau * rejected_logratios
+                + (cmcl_beta * tau_squared / 2.0) * (chosen_logratios ** 2)
+                + (cmcl_gamma * tau_squared / 2.0) * (rejected_logratios ** 2)
             )
 
         else:
@@ -1692,7 +1692,7 @@ class RPCTrainer(BaseTrainer):
                 torch.flatten(chosen_logits, end_dim=1), torch.flatten(chosen_labels, end_dim=1), ignore_index=0
             )
 
-        if "ipo" in self.loss_type or "rpc" in self.loss_type:
+        if "ipo" in self.loss_type or "cmcl" in self.loss_type:
             all_logps = all_logps / loss_mask.sum(-1)
 
         if self.args.ld_alpha is not None and not is_ref_model:

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to run RPC training with DeepSpeed.
+# Script to run CMCL training with DeepSpeed.
 # Configured with categorized variables for easier parameter tuning.
 
 set -e
@@ -13,7 +13,7 @@ CUDA_DEVICES="# AVAILABLE_CUDA_DEVICES"
 NUM_DEVICES="# NUMBER_OF_DEVICES"
 
 # Paths & Files
-SCRIPT_PATH="scripts/run_rpc.py"
+SCRIPT_PATH="scripts/run_cmcl.py"
 TRAIN_FILE="# DATASET_DIRECTORY"
 MODEL_PATH="# SFT_MODEL_DIRECTORY"
 REF_MODEL_PATH="# SFT_MODEL_DIRECTORY"
@@ -32,13 +32,13 @@ SEED=42
 BATCH_SIZE=$((PER_DEVICE_TRAIN_BATCH_SIZE * NUM_DEVICES * GRADIENT_ACCUMULATION_STEPS))
 
 
-# RPC Hyperparameters
+# CMCL Hyperparameters
 BETA=0.1
-RPC_ALPHA=1.0
-RPC_BETA=30.0
-RPC_GAMMA=60.0
-RPC_TAU=1.0
-LOSS_TYPE="rpc" # 'rpc', 'dpo' or 'ipo'
+CMCL_ALPHA=1.0
+CMCL_BETA=30.0
+CMCL_GAMMA=60.0
+CMCL_TAU=1.0
+LOSS_TYPE="cmcl" # 'cmcl', 'dpo' or 'ipo'
 FORCE_REF_MODEL="true"
 
 
@@ -76,7 +76,7 @@ GRADIENT_CHECKPOINTING="true"
 
 # Directory Setup & Argument Construction
 # Construct the experiment directory name based on key hyperparameters
-EXPERIMENT_NAME="lr${LEARNING_RATE}_bs${BATCH_SIZE}_wd${WEIGHT_DECAY}_rpc-alpha${RPC_ALPHA}_rpc-beta${RPC_BETA}_rpc-gamma${RPC_GAMMA}_rpc-tau${RPC_TAU}"
+EXPERIMENT_NAME="lr${LEARNING_RATE}_bs${BATCH_SIZE}_wd${WEIGHT_DECAY}_cmcl-alpha${CMCL_ALPHA}_cmcl-beta${CMCL_BETA}_cmcl-gamma${CMCL_GAMMA}_cmcl-tau${CMCL_TAU}"
 OUTPUT_DIR="${OUTPUT_BASE_DIR}/${EXPERIMENT_NAME}"
 LOGGING_DIR="${OUTPUT_DIR}/logs"
 
@@ -103,10 +103,10 @@ deepspeed --include "localhost:${CUDA_DEVICES}" "${SCRIPT_PATH}" \
   ${RESUME_ARG} \
   --max_length "${MAX_LENGTH}" \
   --max_prompt_length "${MAX_PROMPT_LENGTH}" \
-  --rpc_alpha "${RPC_ALPHA}" \
-  --rpc_beta "${RPC_BETA}" \
-  --rpc_gamma "${RPC_GAMMA}" \
-  --rpc_tau "${RPC_TAU}" \
+  --cmcl_alpha "${CMCL_ALPHA}" \
+  --cmcl_beta "${CMCL_BETA}" \
+  --cmcl_gamma "${CMCL_GAMMA}" \
+  --cmcl_tau "${CMCL_TAU}" \
   --force_ref_model "${FORCE_REF_MODEL}" \
   --per_device_train_batch_size "${PER_DEVICE_TRAIN_BATCH_SIZE}" \
   --gradient_accumulation_steps "${GRADIENT_ACCUMULATION_STEPS}" \

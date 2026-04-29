@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PRMBench inference script for RpcPRM (single-stage SFT-style prompting).
+"""PRMBench inference script (single-stage SFT-style prompting).
 
 This script utilizes vLLM for high-throughput inference and supports
 multiple sampling to evaluate process reward models. It only generates
@@ -55,8 +55,8 @@ def str2bool(v: Any) -> bool:
 
 
 def parse_args() -> argparse.Namespace:
-    """Parses command line arguments for the PRMBench RpcPRM generation."""
-    parser = argparse.ArgumentParser(description="PRMBench RpcPRM generation")
+    """Parses command line arguments for the PRMBench generation."""
+    parser = argparse.ArgumentParser(description="PRMBench generation")
     parser.add_argument("--model_path", type=str, required=True, help="Model path for vLLM")
     parser.add_argument("--data_path", type=str, required=True, help="Input data path (JSON/JSONL file or directory)")
     parser.add_argument("--output_path", type=str, required=True, help="Output JSON path")
@@ -69,7 +69,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--instruction_template", type=str, default=DEFAULT_INSTRUCTION_TEMPLATE, help="SFT-style instruction template")
     parser.add_argument("--save_raw_output", type=str2bool, default=False, help="Whether to save raw model outputs")
     parser.add_argument("--lora_adapter_path", type=str, default=None, help="Optional LoRA adapter path")
-    parser.add_argument("--lora_name", type=str, default="rpc_lora", help="LoRA adapter name")
+    parser.add_argument("--lora_name", type=str, default="cmcl_lora", help="LoRA adapter name")
     parser.add_argument("--lora_int_id", type=int, default=1, help="LoRA adapter integer id")
     # Kept top_p and top_k in argparse to prevent bash script errors, but they are unused in SamplingParams
     parser.add_argument("--top_p", type=float, default=1.0, help="Unused (relies on vLLM default)")

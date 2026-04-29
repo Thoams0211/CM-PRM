@@ -21,7 +21,7 @@ MAX_MODEL_LEN="8192"  # Empty means no limit
 
 show_help() {
   cat <<'EOF'
-Usage: bash discriminator_rpc.sh [options]
+Usage: bash discriminator_cmcl.sh [options]
 
 Options:
   --model_path PATH
@@ -67,7 +67,7 @@ done
 
 # Run command
 echo "============================================================"
-echo "Starting Greedy Search Discriminator (RPC PRM)..."
+echo "Starting Greedy Search Discriminator (CMCL PRM)..."
 echo "Model Path: ${MODEL_PATH}"
 echo "Discriminator Path: ${DISCRIMINATOR_PATH}"
 echo "Generator Path: ${GENERATOR_PATH}"
@@ -85,7 +85,7 @@ echo "============================================================"
 echo ""
 
 CMD=(
-  python discriminator_rpc.py
+  python discriminator_cmcl.py
   --model_path "${MODEL_PATH}"
   --discriminator_path "${DISCRIMINATOR_PATH}"
   --generator_path "${GENERATOR_PATH}"

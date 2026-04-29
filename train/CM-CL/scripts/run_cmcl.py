@@ -10,8 +10,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed, TrainerC
 from peft import LoraConfig, PeftModel, TaskType
 from trl import DPOConfig
 
-from rpc_config import RPCConfig
-from rpc_trainer import RPCTrainer
+from cmcl_config import CMCLConfig
+from cmcl_trainer import CMCLTrainer
 
 
 def create_peft_config(
@@ -23,10 +23,10 @@ def create_peft_config(
 ) -> Optional[LoraConfig]:
 
     """
-    Configuration of LoRA for RPC training.
+    Configuration of LoRA for CMCL training.
 
     Args:
-        use_lora: Whether to use LoRA for RPC training.
+        use_lora: Whether to use LoRA for CMCL training.
         lora_r: The rank of LoRA.
         lora_alpha: The alpha of LoRA.
         lora_dropout: The dropout of LoRA.
@@ -86,7 +86,7 @@ def load_filtered_parquet_dir(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="RPC Finetuning with TRL (Trainer tokenizes; dataset already filtered)")
+    parser = argparse.ArgumentParser(description="CMCL Finetuning with TRL (Trainer tokenizes; dataset already filtered)")
 
     # Dataset configuration
     parser.add_argument("--train_file", type=str, required=True, help="Filtered training dataset directory containing parquet files")
@@ -109,11 +109,11 @@ def main() -> None:
     parser.add_argument("--local_rank", type=int, default=0)
     parser.add_argument("--resume_from_checkpoint", type=str, default=None, help="Path to checkpoint to resume from")
 
-    # RPC hyperparameters
-    parser.add_argument("--rpc_alpha", type=float, default=1.0, help="RPC alpha hyperparameter")
-    parser.add_argument("--rpc_beta", type=float, default=0.1, help="RPC beta hyperparameter")
-    parser.add_argument("--rpc_gamma", type=float, default=0.1, help="RPC gamma hyperparameter")
-    parser.add_argument("--rpc_tau", type=float, default=1.0, help="RPC tau hyperparameter")
+    # CMCL hyperparameters
+    parser.add_argument("--cmcl_alpha", type=float, default=1.0, help="CMCL alpha hyperparameter")
+    parser.add_argument("--cmcl_beta", type=float, default=0.1, help="CMCL beta hyperparameter")
+    parser.add_argument("--cmcl_gamma", type=float, default=0.1, help="CMCL gamma hyperparameter")
+    parser.add_argument("--cmcl_tau", type=float, default=1.0, help="CMCL tau hyperparameter")
     parser.add_argument("--dpo_beta", type=float, default=0.1, help="DPO beta hyperparameter, only used when loss_type=dpo")
 
     # Training parameters
@@ -122,7 +122,7 @@ def main() -> None:
     parser.add_argument("--gradient_accumulation_steps", type=int, default=8)
     parser.add_argument("--num_train_epochs", type=float, default=3.0)
     parser.add_argument("--learning_rate", type=float, default=5e-6)
-    parser.add_argument("--loss_type", type=str, default="rpc", help="Loss type, default ipo")
+    parser.add_argument("--loss_type", type=str, default="cmcl", help="Loss type, default ipo")
     parser.add_argument("--weight_decay", type=float, default=0.0)
     parser.add_argument("--warmup_ratio", type=float, default=0.03, help="Number of warmup steps")
     parser.add_argument("--logging_dir", type=str, default=None, help="Log directory")
@@ -231,13 +231,13 @@ def main() -> None:
     print(f"Loss type: {args.loss_type}")
 
     # Training configuration
-    if args.loss_type == "rpc":
-        training_args = RPCConfig(
+    if args.loss_type == "cmcl":
+        training_args = CMCLConfig(
             output_dir=str(output_dir),
-            rpc_alpha=args.rpc_alpha,
-            rpc_beta=args.rpc_beta,
-            rpc_gamma=args.rpc_gamma,
-            rpc_tau=args.rpc_tau,
+            cmcl_alpha=args.cmcl_alpha,
+            cmcl_beta=args.cmcl_beta,
+            cmcl_gamma=args.cmcl_gamma,
+            cmcl_tau=args.cmcl_tau,
             per_device_train_batch_size=args.per_device_train_batch_size,
             per_device_eval_batch_size=args.per_device_eval_batch_size,
             gradient_accumulation_steps=args.gradient_accumulation_steps,
@@ -247,7 +247,7 @@ def main() -> None:
             warmup_ratio=args.warmup_ratio,
             logging_steps=args.logging_steps,
             logging_dir=args.logging_dir,
-            loss_type=args.loss_type,                  # Loss type, default rpc
+            loss_type=args.loss_type,                  # Loss type, default cmcl
             save_steps=args.save_steps,
             eval_steps=args.eval_steps,
             save_total_limit=args.save_total_limit,
@@ -322,9 +322,9 @@ def main() -> None:
     else:
         raise ValueError(f"Unsupported loss type: {args.loss_type}")
 
-    # Starting RPC training
-    print("Starting RPC training (Trainer will tokenize datasets internally)...")
-    trainer = RPCTrainer(
+    # Starting CMCL training
+    print("Starting CMCL training (Trainer will tokenize datasets internally)...")
+    trainer = CMCLTrainer(
         model=model,
         ref_model=ref_model,
         args=training_args,

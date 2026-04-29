@@ -43,7 +43,7 @@ VERIFICATION_PATTERN = re.compile(
 )
 
 
-class CandidateDiscriminatorRPC:
+class CandidateDiscriminatorCMCL:
     """Selects the best candidate step using single-stage PRM analysis."""
 
     @staticmethod
@@ -74,17 +74,17 @@ class CandidateDiscriminatorRPC:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
     def _build_eval_prompts(self, samples: List[Dict[str, Any]]) -> Tuple[List[str], List[Tuple[Any, int]]]:
-    """Build evaluation prompts for the discriminator.
-    
-    Args:
-        samples: List of samples to build prompts for.
+        """Build evaluation prompts for the discriminator.
         
-    Returns:
-        A tuple of lists:
-            - prompts: List of prompts for the discriminator.
-            - owner_pairs: List of tuples of sample IDs and candidate indices.
-    
-    """
+        Args:
+            samples: List of samples to build prompts for.
+            
+        Returns:
+            A tuple of lists:
+                - prompts: List of prompts for the discriminator.
+                - owner_pairs: List of tuples of sample IDs and candidate indices.
+        
+        """
         prompts: List[str] = []
         owner_pairs: List[Tuple[Any, int]] = []
         for sample in samples:
@@ -243,7 +243,7 @@ class CandidateDiscriminatorRPC:
 
     @staticmethod
     def extract_answer(text: str) -> Optional[str]:
-        answer = CandidateDiscriminatorRPC.extract_boxed(text or "")
+        answer = CandidateDiscriminatorCMCL.extract_boxed(text or "")
         return answer.strip() if answer is not None else None
 
     @staticmethod
@@ -325,14 +325,14 @@ class CandidateDiscriminatorRPC:
         results: List[Dict[str, Any]],
     ) -> None:
 
-    """Select the best candidates from the evaluation results.
-    
-    Args:
-        discriminator_samples: List of discriminator samples.
-        generator_samples: List of generator samples.
-        results: List of evaluation results.
+        """Select the best candidates from the evaluation results.
+        
+        Args:
+            discriminator_samples: List of discriminator samples.
+            generator_samples: List of generator samples.
+            results: List of evaluation results.
 
-    """
+        """
         results_by_sample = self._group_results_by_sample(results)
         discriminator_by_id = {sample["id"]: sample for sample in discriminator_samples}
 
@@ -443,7 +443,7 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    discriminator = CandidateDiscriminatorRPC(
+    discriminator = CandidateDiscriminatorCMCL(
         model_path=args.model_path,
         discriminator_path=args.discriminator_path,
         generator_path=args.generator_path,

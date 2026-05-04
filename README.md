@@ -22,11 +22,20 @@ conda activate cmprm
 
 If your project uses CUDA / distributed training, please also make sure that the correct PyTorch and accelerator versions are installed.
 
+# Dataset Preparation
+You can download the datasets for different tasks from the following links:
+
+
+
+- **Training Set**
+    - SFT & CL Dataset: [https://huggingface.co/datasets/kevinpro/R-PRM/tree/main](https://huggingface.co/datasets/kevinpro/R-PRM/tree/main)
+- **Evaluation Set**
+    - ProcessBench: [https://huggingface.co/datasets/Qwen/ProcessBench](https://huggingface.co/datasets/Qwen/ProcessBench)
+    - PRMBench: [https://huggingface.co/datasets/hitsmy/PRMBench_Preview/tree/main](https://huggingface.co/datasets/hitsmy/PRMBench_Preview/tree/main)
+    - BoN: [https://github.com/NJUNLP/R-PRM/tree/main/src/datasets](https://github.com/NJUNLP/R-PRM/tree/main/src/datasets)
+
 # Training
-
-### Data Preparation
-
-First, create the required directories:
+Create the required directories:
 
 ```bash
 cd train/SFT
@@ -34,7 +43,6 @@ mkdir -p dataset output
 cd ../CM-CL
 mkdir -p dataset output
 ```
-The training data is provided via an external link: [TRAIN_DATASET_LINK](). 
 
 You need move the SFT dataset to `train/SFT/dataset` and the pair preference dataset to `train/CM-CL/dataset`.
 
@@ -55,19 +63,12 @@ bash run.sh
 
 # Evaluation
 
-### Dataset Preparation
-You can download the datasets for different tasks from the following links:
-
-- [EVAL_DATASET_LINK]()
-
 Create the directories for the datasets:
 ```bash
 mkdir -p evaluate/processBench/dataset evaluate/processBench/output
 mkdir -p evaluate/prmBench/dataset evaluate/prmBench/output
 mkdir -p evaluate/BoN/dataset evaluate/BoN/buffer
 ```
-
-### Evaluation
 
 You can run the evaluation for different tasks using the following command:
 ```bash
